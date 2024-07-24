@@ -1,0 +1,334 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: ApiUsuarios
+  description: API que se encarga del manejo de los artículos.
+  termsOfService: ''
+  contact:
+    name: Sintra
+    email: cbi2193052801@izt.uam.mx
+    url: 'http://www.iztapalapa.uam.mx/'
+  license:
+    url: 'http://www.iztapalapa.uam.mx/'
+    name: UAM
+servers:
+  - url: 'http://localhost:3000'
+    description: ''
+paths:
+  /api/articulos:
+    get:
+      tags:
+        - Articulos
+      summary: GET Obten la lista de articulos registrados.
+      description: Obten la lista de todos los articulos.
+      operationId: get-all-articulos
+      responses:
+        '200':
+          $ref: '#/components/responses/Respuesta200'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          $ref: '#/components/responses/Respuesta404'
+        '500':
+          $ref: '#/components/responses/Respuesta500'
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+    post:
+      tags:
+        - Articulos
+      summary: POST Crea un articulo.
+      description: Permite registrar un articulo.
+      operationId: post-articulo
+      requestBody:
+        $ref: '#/components/requestBodies/ArticuloRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/Respuesta200'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          $ref: '#/components/responses/Respuesta404'
+        '500':
+          $ref: '#/components/responses/Respuesta500'
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+  '/api/articulos/{id}':
+    get:
+      tags:
+        - Articulos
+      summary: GET Obtiene un articulo dado su ID.
+      description: Permite obtener un articulo dado el ID.
+      operationId: get-articulo-by-id
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/Respuesta200A'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          $ref: '#/components/responses/Respuesta404'
+        '500':
+          $ref: '#/components/responses/Respuesta500'
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+    put:
+      tags:
+        - Articulos
+      summary: PUT Actualiza un articulo segun el id.
+      description: Permite actualizar un articulo segun el ID.
+      operationId: put-articulo-by-id
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        $ref: '#/components/requestBodies/ArticuloRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/Respuesta200A'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          $ref: '#/components/responses/Respuesta404'
+        '500':
+          $ref: '#/components/responses/Respuesta500'
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+    delete:
+      tags:
+        - Articulos
+      summary: DELETE Elimina un articulo segun su ID.
+      description: 'Permite eliminar un articulo segun su ID. '
+      operationId: delete-articulo-by-id
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          $ref: '#/components/responses/Respuesta204'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          $ref: '#/components/responses/Respuesta404'
+        '500':
+          $ref: '#/components/responses/Respuesta500'
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+  '/api/articulos/categoria/{categoria}':
+    get:
+      tags:
+        - Articulos
+      summary: GET Obten la lista de articulos dada la categoria
+      description: Permite obtener la lista de los articulos dada la categoria.
+      operationId: get-all-articulos-by-categoria
+      parameters:
+        - $ref: '#/components/parameters/categoria'
+      responses:
+        '200':
+          $ref: '#/components/responses/Respuesta200'
+        '400':
+          $ref: '#/components/responses/Respuesta400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      servers:
+        - url: 'http://localhost:3000'
+          description: ''
+tags:
+  - name: Articulos
+    description: Operaciones relacionadas con Articulos
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: ID del articulo
+      required: true
+      schema:
+        type: integer
+    categoria:
+      name: categoria
+      in: path
+      description: Indica la categoria del articulo
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    ArticuloRequest:
+      description: 'Se requieren de los siguientes atributos:'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Articulo'
+          examples:
+            Example 1:
+              value:
+                id: 0
+                titulo: string
+                contenido: string
+                descripcion: string
+                categoria: Analisis medico
+                foto: string
+  responses:
+    Respuesta200:
+      description: '200 Ok: Lista de articulos obtenidos correctamente. '
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Articulo'
+          examples:
+            Example 1:
+              value:
+                - id: 1
+                  titulo: Análisis de cálculos renales
+                  contenido: Los cálculos renales son pequeños fragmentos solidos parecidos a piedritas que se forman en uno o ambos riñones. Los calculos renales se forman cuando tiene niveles altos de ciertos minerales o sales en su orina.
+                  descripcion: 'Para recolectar un cálculo renal, usted necesita un colador para filtrar su orina y un contenedor limpio para recoger el cálculo. Un colador de cálculos renales es un dispositivo hecho de una malla fina o gasa. Su profesional de la salud puede entregarle uno o lo puede comprar en una farmacia. '
+                  categoria: Analisis medico
+                  foto: A1112
+    Respuesta400:
+      description: '400 Bad Request: Error al realizar la peticion.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400'
+          examples:
+            Example 1:
+              value:
+                timestamp: '2024-07-23T14:30:00Z'
+                status: 400
+                message: Internal server error. Please try again later.
+                error: An unexpected error occurred on the server.
+    Respuesta404:
+      description: |-
+        Not Found: No se encontro el contenido solicitado.
+        Revise que su solicitud sea correcta e intentelo de nuevo.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404'
+          examples:
+            Example 1:
+              value:
+                timestamp: '2024-07-23T14:30:00Z'
+                status: 404
+                message: Not Found. Content not find.
+                error: The content was not found.
+    Respuesta500:
+      description: 'Internal Server Error: Ha sucedido un error en la aplicacion. '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error500'
+          examples:
+            Example 1:
+              value:
+                timestamp: '2024-07-23T14:30:00Z'
+                status: 500
+                message: Internal server error. Please try again later.
+                error: An unexpected error occurred on the server.
+    Respuesta200A:
+      description: '200 Ok: Articulo obtenido exitosamente.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Articulo'
+          examples:
+            Example 1:
+              value:
+                id: 1
+                titulo: Análisis de cálculos renales
+                contenido: Los cálculos renales son pequeños fragmentos solidos parecidos a piedritas que se forman en uno o ambos riñones. Los calculos renales se forman cuando tiene niveles altos de ciertos minerales o sales en su orina.
+                descripcion: 'Para recolectar un cálculo renal, usted necesita un colador para filtrar su orina y un contenedor limpio para recoger el cálculo. Un colador de cálculos renales es un dispositivo hecho de una malla fina o gasa. Su profesional de la salud puede entregarle uno o lo puede comprar en una farmacia.'
+                categoria: Analisis medico
+                foto: A112
+    Respuesta204:
+      description: '204 Ok No Content: El articulo fue eliminado de manera exitsa. '
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+  schemas:
+    Articulo:
+      type: object
+      title: Articulo
+      description: Modelo que describe los atributos del articulo.
+      properties:
+        id:
+          type: integer
+          description: ID del articulo.
+          format: int32
+        titulo:
+          type: string
+          description: Titulo del articulo.
+        contenido:
+          type: string
+          description: Contenido del articulo.
+        descripcion:
+          type: string
+          description: Descripcion del articulo.
+        categoria:
+          type: string
+          enum:
+            - Analisis medico
+            - Estudios medicos
+            - Salud mental y emocional
+            - Recomendaciones medicas
+            - Ejercicio y actividad fisica
+            - Productos
+          description: Categoria a la que pertenece el articulo.
+        foto:
+          type: string
+          description: Foto referente al articulo.
+      required:
+        - id
+        - titulo
+        - contenido
+        - descripcion
+        - categoria
+    Error400:
+      type: object
+      title: Error400
+      description: Modelo para el error 400.
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
+    Error404:
+      type: object
+      title: Error404
+      description: Modelo para el error 404
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
+    Error500:
+      type: object
+      title: Error500
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string
