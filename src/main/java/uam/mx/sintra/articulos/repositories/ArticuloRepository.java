@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 import uam.mx.sintra.articulos.models.Articulo;
 
 @Repository
-public interface ArticuloRepository extends MongoRepository<Articulo, Integer> {
+public interface ArticuloRepository extends MongoRepository<Articulo, Long> {
+
+
 }

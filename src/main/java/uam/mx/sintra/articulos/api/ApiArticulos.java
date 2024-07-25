@@ -5,11 +5,7 @@
  */
 package uam.mx.sintra.articulos.api;
 
-import uam.mx.sintra.articulos.models.Articulo;
-import uam.mx.sintra.articulos.models.Error400;
-import uam.mx.sintra.articulos.models.Error404;
-import uam.mx.sintra.articulos.models.Error500;
-import uam.mx.sintra.articulos.models.InlineResponse204;
+import uam.mx.sintra.articulos.models.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -44,12 +40,12 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<InlineResponse204> deleteArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Integer id);
+    ResponseEntity<InlineResponse204> deleteArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "GET Obten la lista de articulos registrados.", description = "Obten la lista de todos los articulos.", tags={ "Articulos" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "200 Ok: Lista de articulos obtenidos correctamente. ", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Articulo.class)))),
+        @ApiResponse(responseCode = "200", description = "200 Ok: Lista de articulos obtenidos correctamente. ", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ArticuloResponse.class)))),
         
         @ApiResponse(responseCode = "400", description = "400 Bad Request: Error al realizar la peticion.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error400.class))),
         
@@ -59,7 +55,7 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Articulo>> getAllArticulos();
+    ResponseEntity<List<ArticuloResponse>> getAllArticulos();
 
 
     @Operation(summary = "GET Obten la lista de articulos dada la categoria", description = "Permite obtener la lista de los articulos dada la categoria.", tags={ "Articulos" })
@@ -79,7 +75,7 @@ public interface ApiArticulos {
 
     @Operation(summary = "GET Obtiene un articulo dado su ID.", description = "Permite obtener un articulo dado el ID.", tags={ "Articulos" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "200 Ok: Articulo obtenido exitosamente.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Articulo.class))),
+        @ApiResponse(responseCode = "200", description = "200 Ok: Articulo obtenido exitosamente.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ArticuloResponse.class))),
         
         @ApiResponse(responseCode = "400", description = "400 Bad Request: Error al realizar la peticion.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error400.class))),
         
@@ -89,12 +85,12 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Articulo> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Integer id);
+    ResponseEntity<ArticuloResponse> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "POST Crea un articulo.", description = "Permite registrar un articulo.", tags={ "Articulos" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "200 Ok: Lista de articulos obtenidos correctamente. ", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Articulo.class)))),
+        @ApiResponse(responseCode = "201", description = "200 Ok: Lista de articulos obtenidos correctamente. ", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ArticuloResponse.class)))),
         
         @ApiResponse(responseCode = "400", description = "400 Bad Request: Error al realizar la peticion.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error400.class))),
         
@@ -105,7 +101,7 @@ public interface ApiArticulos {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<List<Articulo>> postArticulo(@Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody Articulo body);
+    ResponseEntity<ArticuloResponse> postArticulo(@Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody ArticuloRequest body);
 
 
     @Operation(summary = "PUT Actualiza un articulo segun el id.", description = "Permite actualizar un articulo segun el ID.", tags={ "Articulos" })
@@ -121,7 +117,7 @@ public interface ApiArticulos {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Articulo> putArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Integer id, @Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody Articulo body);
+    ResponseEntity<Articulo> putArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody Articulo body);
 
 }
 

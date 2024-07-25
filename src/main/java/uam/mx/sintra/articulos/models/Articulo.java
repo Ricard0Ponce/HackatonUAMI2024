@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -25,8 +26,12 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @Document(collection = "articulos")
 public class Articulo   {
+
+  @Transient
+  public static final String SEQUENCE_NAME = "articulo_sequence";
+
   @JsonProperty("id")
-  private Integer id = null;
+  private Long id = null;
 
   @JsonProperty("titulo")
   private String titulo = null;
@@ -81,7 +86,25 @@ public class Articulo   {
   @JsonProperty("foto")
   private String foto = null;
 
-  public Articulo id(Integer id) {
+  @JsonProperty("requisitos")
+  private String requisitos;
+
+  public String getRequisitos() {
+    return requisitos;
+  }
+
+  public void setRequisitos(String requisitos) {
+    this.requisitos = requisitos;
+  }
+
+  public Articulo requisitos(String requisitos) {
+    this.requisitos = requisitos;
+    return this;
+  }
+
+
+
+  public Articulo id(Long id) {
     this.id = id;
     return this;
   }
@@ -93,11 +116,11 @@ public class Articulo   {
   @Schema(required = true, description = "ID del articulo.")
       @NotNull
 
-    public Integer getId() {
+    public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -215,12 +238,13 @@ public class Articulo   {
         Objects.equals(this.contenido, articulo.contenido) &&
         Objects.equals(this.descripcion, articulo.descripcion) &&
         Objects.equals(this.categoria, articulo.categoria) &&
-        Objects.equals(this.foto, articulo.foto);
+        Objects.equals(this.foto, articulo.foto) &&
+        Objects.equals(this.requisitos, articulo.requisitos);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, titulo, contenido, descripcion, categoria, foto);
+    return Objects.hash(id, titulo, contenido, descripcion, categoria, foto, requisitos);
   }
 
   @Override
@@ -234,6 +258,7 @@ public class Articulo   {
     sb.append("    descripcion: ").append(toIndentedString(descripcion)).append("\n");
     sb.append("    categoria: ").append(toIndentedString(categoria)).append("\n");
     sb.append("    foto: ").append(toIndentedString(foto)).append("\n");
+    sb.append("    requisitos: ").append(toIndentedString(requisitos)).append("\n");
     sb.append("}");
     return sb.toString();
   }
