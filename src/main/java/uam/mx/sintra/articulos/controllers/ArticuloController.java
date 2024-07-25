@@ -48,7 +48,7 @@ public class ArticuloController implements ApiArticulos {
 
     // Permite actualizar un articulo por su id
     @Override
-    public ResponseEntity<Articulo> putArticuloById(Long id, Articulo body) {
-        return null;
+    public ResponseEntity<ArticuloResponse> putArticuloById(Long id, ArticuloRequest body) {
+        return ResponseEntity.status(HttpStatus.OK).body(articuloService.updateArticulo(id, body).get());
     }
 }

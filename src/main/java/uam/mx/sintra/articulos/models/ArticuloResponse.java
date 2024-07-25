@@ -1,24 +1,13 @@
 package uam.mx.sintra.articulos.models;
 
-import javax.validation.constraints.NotNull;
-
+//Este record nos permite obtener los datos de un articulo para poder mostrarlo
 public record ArticuloResponse(
         String titulo,
         String contenido,
         String descripcion,
-        CategoriaEnum categoriaEnum,
+        String categoria,
         String foto,
         String requisitos
 ) {
-    public enum CategoriaEnum {
-        ANALISIS_MEDICO,
 
-        ESTUDIOS_MEDICOS,
-
-        SALUD_MENTAL_Y_EMOCIONAL,
-
-        RECOMENDACIONES_MEDICAS,
-
-        EJERCICIO_Y_ACTIVIDAD_FISICA
-    }
 }

@@ -3,7 +3,7 @@ package uam.mx.sintra.articulos.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
-
+// Este record nos permitira obtener los datos de un articulo para poder crearlo
 public record ArticuloRequest(
         @NotNull(message="El titulo del articulo no puede ser nulo.")
         String titulo,
@@ -11,19 +11,8 @@ public record ArticuloRequest(
         String contenido,
         @NotNull(message="La descripcion del articulo no puede ser nula.")
         String descripcion,
-        CategoriaEnum categoriaEnum,
+        String categoria,
         String foto,
         String requisitos
-) {
-        public enum CategoriaEnum {
-                ANALISIS_MEDICO,
-
-                ESTUDIOS_MEDICOS,
-
-                SALUD_MENTAL_Y_EMOCIONAL,
-
-                RECOMENDACIONES_MEDICAS,
-
-                EJERCICIO_Y_ACTIVIDAD_FISICA
-        }
+){
 }

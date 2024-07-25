@@ -117,7 +117,7 @@ public interface ApiArticulos {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Articulo> putArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody Articulo body);
+    ResponseEntity<ArticuloResponse> putArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "Se requieren de los siguientes atributos:", schema=@Schema()) @Valid @RequestBody ArticuloRequest body);
 
 }
 

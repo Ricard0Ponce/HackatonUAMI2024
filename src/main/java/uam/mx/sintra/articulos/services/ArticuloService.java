@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+// Definimos una interfaz que sera implementada en ArticuloServiceImpl, este es el contrato que se va a seguir.
+// Todas las funcionalidades (Metodos) deben ir declarados aqui.
 public interface ArticuloService {
     public Optional<ArticuloResponse> createArticulo(ArticuloRequest articulo);
     public List<ArticuloResponse> getAllArticulos();
     public Optional<ArticuloResponse> getArticuloById(Long id);
+    public Optional<ArticuloResponse> updateArticulo(Long id, ArticuloRequest articulo);
+    public void deleteArticulo(Long id);
 }

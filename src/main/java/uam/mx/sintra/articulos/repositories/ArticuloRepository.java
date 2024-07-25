@@ -7,5 +7,4 @@ import uam.mx.sintra.articulos.models.Articulo;
 @Repository
 public interface ArticuloRepository extends MongoRepository<Articulo, Long> {
 
-
 }
