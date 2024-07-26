@@ -30,7 +30,7 @@ public interface ApiArticulos {
 
     @Operation(summary = "DELETE Elimina un articulo segun su ID.", description = "Permite eliminar un articulo segun su ID. ", tags={ "Articulos" })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "204 Ok No Content: El articulo fue eliminado de manera exitsa. ", content = @Content(mediaType = "application/json", schema = @Schema(implementation = InlineResponse204.class))),
+        @ApiResponse(responseCode = "204", description = "204 Ok No Content: El articulo fue eliminado de manera exitsa. ", content = @Content(mediaType = "application/json")),
         
         @ApiResponse(responseCode = "400", description = "400 Bad Request: Error al realizar la peticion.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error400.class))),
         
@@ -40,7 +40,7 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<InlineResponse204> deleteArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<?> deleteArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "GET Obten la lista de articulos registrados.", description = "Obten la lista de todos los articulos.", tags={ "Articulos" })
@@ -85,7 +85,7 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<ArticuloResponse> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<?> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "POST Crea un articulo.", description = "Permite registrar un articulo.", tags={ "Articulos" })

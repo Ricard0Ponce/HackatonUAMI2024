@@ -16,5 +16,5 @@ public interface ArticuloService {
     public List<ArticuloResponse> getAllArticulos();
     public Optional<ArticuloResponse> getArticuloById(Long id);
     public Optional<ArticuloResponse> updateArticulo(Long id, ArticuloRequest articulo);
-    public void deleteArticulo(Long id);
+    public boolean deleteArticulo(Long id);
 }

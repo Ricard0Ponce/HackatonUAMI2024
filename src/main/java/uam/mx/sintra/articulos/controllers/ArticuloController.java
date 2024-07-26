@@ -3,26 +3,30 @@ package uam.mx.sintra.articulos.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import uam.mx.sintra.articulos.api.ApiArticulos;
+import uam.mx.sintra.articulos.exceptions.ArticuloNotFoundException;
 import uam.mx.sintra.articulos.models.Articulo;
 import uam.mx.sintra.articulos.models.ArticuloRequest;
 import uam.mx.sintra.articulos.models.ArticuloResponse;
-import uam.mx.sintra.articulos.models.InlineResponse204;
 import uam.mx.sintra.articulos.services.ArticuloService;
-
 import java.util.List;
 
+@Validated
 @RestController
 public class ArticuloController implements ApiArticulos {
 
     @Autowired
     private ArticuloService articuloService;
 
-
     @Override
-    public ResponseEntity<InlineResponse204> deleteArticuloById(Long id) {
-        return null;
+    public ResponseEntity<?> deleteArticuloById(Long id) {
+        if(articuloService.deleteArticulo(id)){
+            return ResponseEntity.ok(articuloService.deleteArticulo(id));
+        } else{
+            throw new ArticuloNotFoundException("El articulo con el id " + id + " no se encuentra en la base de datos.");
+        }
     }
 
     @Override
