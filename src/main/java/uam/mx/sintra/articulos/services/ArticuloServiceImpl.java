@@ -3,8 +3,12 @@ package uam.mx.sintra.articulos.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uam.mx.sintra.articulos.exceptions.ListEmptyException;
+import uam.mx.sintra.articulos.exceptions.RequestException;
 import uam.mx.sintra.articulos.mappers.ArticuloMapper;
 import uam.mx.sintra.articulos.models.Articulo;
 import uam.mx.sintra.articulos.models.ArticuloRequest;
@@ -12,9 +16,7 @@ import uam.mx.sintra.articulos.models.ArticuloResponse;
 import uam.mx.sintra.articulos.models.DatabaseSequence;
 import uam.mx.sintra.articulos.repositories.ArticuloRepository;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
@@ -43,31 +45,48 @@ public class ArticuloServiceImpl implements ArticuloService {
     @Transactional
     @Override
     public Optional<ArticuloResponse> createArticulo(@Valid ArticuloRequest articulo) {
-        // Mapear de ArticuloRequest a Articulo para poder guardarlo en la base de datos
-        Articulo articuloEntity = ArticuloMapper.INSTANCE.toArticulo(articulo);
-        // Se le asigna el id al objeto que se va a guardar
-        articuloEntity.setId(generateSequence(Articulo.SEQUENCE_NAME));
-        // Se guarda el articulo en la base de datos
-        return Optional.of(articuloRepository.save(articuloEntity))
-                .map(ArticuloMapper.INSTANCE::toArticuloResponse); // Con map se mapea de Articulo a ArticuloResponse para devolver la respuesta
+        try {
+            // Mapear de ArticuloRequest a Articulo para poder guardarlo en la base de datos
+            Articulo articuloEntity = ArticuloMapper.INSTANCE.toArticulo(articulo);
+            // Se le asigna el id al objeto que se va a guardar
+            articuloEntity.setId(generateSequence(Articulo.SEQUENCE_NAME));
+            // Se guarda el articulo en la base de datos
+            return Optional.of(articuloRepository.save(articuloEntity))
+                    .map(ArticuloMapper.INSTANCE::toArticuloResponse); // Con map se mapea de Articulo a ArticuloResponse para devolver la respuesta
+        } catch (RequestException e){
+            throw new RuntimeException("Uno de los atributos es nulo.");
+        }
+
     }
+
 
     // Metodo que permitira obtener todos los articulos
     @Transactional(readOnly = true) // Indicamos que esta funcion es de solo lectura
     @Override
     public List<ArticuloResponse> getAllArticulos() {
-        return articuloRepository.findAll() // Obtenemos todos los articulos
-                .stream() // Convertimos la lista a un stream
-                .map(ArticuloMapper.INSTANCE::toArticuloResponse) // Mapeamos de Articulo a ArticuloResponse
-                .collect(Collectors.toList());  // Convertimos el stream a una lista
+        if(!articuloRepository.findAll().isEmpty()){
+            return articuloRepository.findAll() // Obtenemos todos los articulos
+                    .stream() // Convertimos la lista a un stream
+                    .map(ArticuloMapper.INSTANCE::toArticuloResponse) // Mapeamos de Articulo a ArticuloResponse
+                    .collect(Collectors.toList());  // Convertimos el stream a una lista
+        }
+        else{
+            throw new ListEmptyException("No se encontraron elementos dentro de la lista");
+        }
+
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<ArticuloResponse> getArticuloById(Long id) {
+        if(articuloRepository.findById(id).isPresent()){
             return articuloRepository.findById(id) // Obtenemos el articulo por medio del id
                     .map(ArticuloMapper.INSTANCE::toArticuloResponse); // Mapeamos de Articulo a ArticuloResponse
+        } else{
+            throw new RuntimeException("El articulo buscado no fue encontrado.");
+        }
     }
+
 
     @Transactional
     @Override
@@ -79,13 +98,16 @@ public class ArticuloServiceImpl implements ArticuloService {
     }
 
     @Override
-    public boolean deleteArticulo(Long id) {
+    public Map<String, String> deleteArticulo(Long id) {
         if(articuloRepository.findById(id).isPresent()){
             articuloRepository.deleteById(id);
-            return true;
+            Map<String, String> res = new HashMap<>();
+            res.put("respuesta:","Se ha eliminado el elemento correctamente");
+            return res;
         }
         else{
-            return false;
+            throw new RuntimeException("El elemento no fue encontrado, por lo tanto no se elimino");
         }
     }
+
 }

@@ -1,6 +1,6 @@
 package uam.mx.sintra.articulos.models;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 // Este record nos permitira obtener los datos de un articulo para poder crearlo
 public record ArticuloRequest(

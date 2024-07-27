@@ -1,16 +1,16 @@
 package uam.mx.sintra.articulos.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import uam.mx.sintra.articulos.api.ApiArticulos;
-import uam.mx.sintra.articulos.exceptions.ArticuloNotFoundException;
-import uam.mx.sintra.articulos.models.Articulo;
-import uam.mx.sintra.articulos.models.ArticuloRequest;
-import uam.mx.sintra.articulos.models.ArticuloResponse;
+import uam.mx.sintra.articulos.models.*;
 import uam.mx.sintra.articulos.services.ArticuloService;
+
+import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -22,11 +22,7 @@ public class ArticuloController implements ApiArticulos {
 
     @Override
     public ResponseEntity<?> deleteArticuloById(Long id) {
-        if(articuloService.deleteArticulo(id)){
-            return ResponseEntity.ok(articuloService.deleteArticulo(id));
-        } else{
-            throw new ArticuloNotFoundException("El articulo con el id " + id + " no se encuentra en la base de datos.");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(articuloService.deleteArticulo(id));
     }
 
     @Override
@@ -35,12 +31,17 @@ public class ArticuloController implements ApiArticulos {
     }
 
     @Override
-    public ResponseEntity<List<Articulo>> getAllArticulosByCategoria(String categoria) {
+    public ResponseEntity<?> getAllArticulosByCategoria(String categoria) {
+        // Agregar el try and catch y con ello el else
+        if(articuloService.getAllArticulos().isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Error404(String.valueOf(new Date()), 404, "No hay articulos en la base de datos.", "ArticuloNotFoundException"));
+        }
         return null;
     }
 
     @Override
     public ResponseEntity<ArticuloResponse> getArticuloById(Long id) {
+        // Solo devolvemos esto, si sucede una excepcion esta sucede en el controlador y devolvera el resultado correspondiente
         return ResponseEntity.status(HttpStatus.OK).body(articuloService.getArticuloById(id).get());
     }
 

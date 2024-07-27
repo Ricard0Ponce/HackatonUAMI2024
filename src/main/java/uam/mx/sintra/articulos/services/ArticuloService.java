@@ -6,6 +6,7 @@ import uam.mx.sintra.articulos.models.ArticuloRequest;
 import uam.mx.sintra.articulos.models.ArticuloResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,5 @@ public interface ArticuloService {
     public List<ArticuloResponse> getAllArticulos();
     public Optional<ArticuloResponse> getArticuloById(Long id);
     public Optional<ArticuloResponse> updateArticulo(Long id, ArticuloRequest articulo);
-    public boolean deleteArticulo(Long id);
+    public Map<String, String> deleteArticulo(Long id);
 }

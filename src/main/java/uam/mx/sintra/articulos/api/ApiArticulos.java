@@ -70,7 +70,7 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/categoria/{categoria}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Articulo>> getAllArticulosByCategoria(@Parameter(in = ParameterIn.PATH, description = "Indica la categoria del articulo", required=true, schema=@Schema()) @PathVariable("categoria") String categoria);
+    ResponseEntity<?> getAllArticulosByCategoria(@Parameter(in = ParameterIn.PATH, description = "Indica la categoria del articulo", required=true, schema=@Schema()) @PathVariable("categoria") String categoria);
 
 
     @Operation(summary = "GET Obtiene un articulo dado su ID.", description = "Permite obtener un articulo dado el ID.", tags={ "Articulos" })
@@ -85,7 +85,7 @@ public interface ApiArticulos {
     @RequestMapping(value = "/api/articulos/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<?> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
+    ResponseEntity<ArticuloResponse> getArticuloById(@Parameter(in = ParameterIn.PATH, description = "ID del articulo", required=true, schema=@Schema()) @PathVariable("id") Long id);
 
 
     @Operation(summary = "POST Crea un articulo.", description = "Permite registrar un articulo.", tags={ "Articulos" })
